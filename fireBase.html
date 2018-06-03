@@ -1,0 +1,60 @@
+<html>
+<script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
+<div> Hello Fire Base </div>
+ <pre id='data'></pre>
+ <div id = 'output'></div>
+ <div id = 'output1'></div>
+  <image id = 'output2'></image>
+  <input type="file" accept="image/*" capture="camera" id="cameraInput">
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCXuHov4lYC3quP3cuJMNktTpmVh37jZb4",
+    authDomain: "anish-d79c6.firebaseapp.com",
+    databaseURL: "https://anish-d79c6.firebaseio.com",
+    projectId: "anish-d79c6",
+    storageBucket: "anish-d79c6.appspot.com",
+    messagingSenderId: "597853120981"
+  };
+  const store = firebase.initializeApp(config);
+  firebase.database().ref('contacts').set({
+    contact: 'coolguy',
+    email: 'blah',
+
+  });
+  var ref = firebase.database().ref();                          
+  ref.on("value", function(snapshot){
+  var output = document.getElementById('output');
+    output.innerHTML = JSON.stringify(snapshot.val(), null, 2);
+	var starCountRef = firebase.database().ref('contacts');
+starCountRef.on('value', function(snapshot) {
+var output1 = document.getElementById('output1');
+   output1.innerHTML = JSON.stringify(snapshot.val(), null, 2);
+});
+
+var image = firebase.database().ref('Anish');
+image.on('value', function(snapshot) {
+var output2 = document.getElementById('output2');
+   output2.src = snapshot.val()['imag'];
+});
+});
+
+ let storageRef = firebase.storage().ref('photos/myPictureName')
+  let fileUpload = document.getElementById("cameraInput")
+fileUpload.addEventListener('change', function(evt) {
+      let firstFile = evt.target.files[0] // upload the first file only
+      let uploadTask = storageRef.put(firstFile).then((retrieve)=> {
+	  console.log(retrieve.metadata.fullPath)
+	
+ref = firebase.storage().ref('/')
+	//  var httpsReference = firebase.storage().refFromURL('https://firebasestorage.googleapis.com/b/bucket/o/photos%20myPictureName')
+ref.child('photos/myPictureName').getDownloadURL().then(function(url) {
+  console.log(url);});
+	  
+	  })
+  })
+
+</script>
+
+
+</html>
